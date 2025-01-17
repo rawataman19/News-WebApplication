@@ -59,14 +59,24 @@ Edit
 src/
 ├── components/
 │   ├── Footer.jsx        # Footer of the application
+
 |   ├── Loader.jsx        # Loading spinner for API calls
+
 │   ├── MainContainer.jsx # Main component rendering news
+
 │   ├── Navbar.jsx        # Navigation bar
+
 │   └── NewsCard.jsx      # Individual news article card
+
+
 ├── App.js                # Main application component
+
 ├── App.css               # Custom styles
+
 ├── index.js              # Entry point of the application
+
 ├── index.css             # Tailwind CSS styles
+
 └── logo.svg              # App logo
 Usage
 Browse through the latest news articles.
