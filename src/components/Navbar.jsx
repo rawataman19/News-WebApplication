@@ -1,30 +1,32 @@
 import React, { useState } from "react";
+import newsImage from "../images/news.png";
 
 const Navbar = ({ fetchNews }) => {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false); // State for toggling menu
   const categories = ["Cricket", "India", "Technology", "Politics"];
-  const [activeCategory, setActiveCategory] = useState("");
 
   const handleSearch = () => {
-    if (query) {
+    if (!query || !isNaN(query)) {
+      alert("Please enter a valid topic.");
+    } else {
       fetchNews(query);
-      setActiveCategory("");
     }
   };
+  
 
   const handleCategoryClick = (category) => {
     fetchNews(category.toLowerCase());
-    setActiveCategory(category);
     setIsOpen(false); // Close the menu on selection
   };
+  
 
   return (
-    <nav className="bg-blue-50 fixed top-0 left-0 right-0 shadow-md z-10">
+    <nav className="bg-blue-50 fixed top-0 left-0 right-0 shadow-md z-30">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         {/* Logo */}
         <a href="/" className="flex-shrink-0">
-          <img src="./images/logo.png" alt="logo" className="w-32" />
+          <img src={newsImage} alt="logo" className="w-10" />
         </a>
 
         {/* Hamburger Icon */}
@@ -52,22 +54,39 @@ const Navbar = ({ fetchNews }) => {
         <ul
           className={`${
             isOpen ? "block" : "hidden"
-          } absolute lg:relative bg-blue-50 lg:bg-transparent top-16 lg:top-0 left-0 w-full lg:w-auto flex flex-col lg:flex-row lg:space-x-4 lg:items-center lg:flex p-4 lg:p-0 z-10`}
+          } lg:flex lg:space-x-4 lg:items-center bg-blue-50 lg:bg-transparent absolute lg:relative top-16 lg:top-0 left-0 w-full lg:w-auto flex flex-col lg:flex-row items-center p-4 lg:p-0 z-20`}
         >
           {categories.map((category) => (
             <li
               key={category}
-              className={`cursor-pointer hover:text-blue-500 ${
-                activeCategory === category ? "text-blue-500" : "text-gray-700"
-              } py-2 lg:py-0`}
-              onClick={() => handleCategoryClick(category)}
+              className="cursor-pointer hover:text-blue-500"
+              onClick={() => fetchNews(category.toLowerCase())}
             >
               {category}
             </li>
           ))}
+          {/* Mobile Search */}
+          {isOpen && (
+            <div className="mt-4 w-full lg:hidden">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="border rounded px-4 py-2 w-full mb-2"
+                placeholder="e.g. Science"
+                pattern="[A-Za-z ]*"
+              />
+              <button
+                onClick={handleSearch}
+                className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
+              >
+                Search
+              </button>
+            </div>
+          )}
         </ul>
 
-        {/* Search Bar */}
+        {/* Desktop Search */}
         <div className="hidden lg:flex items-center space-x-2">
           <input
             type="text"
@@ -75,6 +94,7 @@ const Navbar = ({ fetchNews }) => {
             onChange={(e) => setQuery(e.target.value)}
             className="border rounded px-4 py-2"
             placeholder="e.g. Science"
+            pattern="[A-Za-z ]*"
           />
           <button
             onClick={handleSearch}
@@ -82,34 +102,8 @@ const Navbar = ({ fetchNews }) => {
           >
             Search
           </button>
-          <button
-  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-  onClick={() => fetchNews("dance")}
->
-  Dance Search
-</button>
-
-  </div>
-      </div>
-
-      {/* Mobile Search */}
-      {isOpen && (
-        <div className="block lg:hidden px-4 py-2">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="border rounded px-4 py-2 w-full mb-2"
-            placeholder="e.g. Science"
-          />
-          <button
-            onClick={handleSearch}
-            className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
-          >
-            Search
-          </button>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
